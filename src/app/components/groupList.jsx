@@ -32,7 +32,7 @@ GroupList.defaultProps = {
    contentPropety: 'name'
 };
 GroupList.propTypes = {
-   items: PropTypes.object.isRequired,
+   items: PropTypes.array.isRequired,
    valueProperty: PropTypes.string.isRequired,
    contentPropety: PropTypes.string.isRequired,
    onItemSelect: PropTypes.func,
