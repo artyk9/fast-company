@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { professionsObject as professions } from './professions.api';
+=======
+import { professions } from "./professions.api";
+>>>>>>> c9503397102c2b39c500b8b86cee319421c8829d
 const qualities = {
    tedious: {
       _id: '67rdca3eeb7f6fgeed471198',
