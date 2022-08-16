@@ -7,14 +7,15 @@ import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import UsersTable from './usersTable';
 import _ from 'lodash';
+import Loader from './loader';
+
+const pageSize = 8;
 
 const Users = () => {
    const [currentPage, setCurrentPage] = useState(1);
    const [professions, setProfessions] = useState();
    const [selectedProf, setSelectedProf] = useState();
    const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
-   const pageSize = 8;
-
    const [users, setUsers] = useState();
 
    useEffect(() => {
@@ -26,16 +27,12 @@ const Users = () => {
       setUsers(users.filter((user) => user._id !== userId));
    };
 
-   const handleToggleBookMark = (id) => {
-      setUsers(
-         users.map((user) => {
-            if (user._id === id) {
-               return { ...user, bookmark: !user.bookmark };
-            }
-            return user;
-         })
-      );
-      console.log(id);
+   const handleToggleBookmark = (userId) => {
+      const newUsersState = users.map((user) => {
+         if (user._id === userId) user.bookmark = !user.bookmark;
+         return user;
+      });
+      setUsers(newUsersState);
    };
 
    useEffect(() => {
@@ -104,7 +101,7 @@ const Users = () => {
                      onSort={handleSort}
                      selectedSort={sortBy}
                      onDelete={handleDelete}
-                     onToggleBookMark={handleToggleBookMark}
+                     onToggleBookmark={handleToggleBookmark}
                   />
                )}
                <div className="d-flex justify-content-center">
@@ -119,7 +116,7 @@ const Users = () => {
          </div>
       );
    }
-   return 'loading...';
+   return <Loader />;
 };
 Users.propTypes = {
    users: PropTypes.array
