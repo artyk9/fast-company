@@ -8,6 +8,7 @@ import SearchStatus from './searchStatus';
 import UsersTable from './usersTable';
 import _ from 'lodash';
 import Loader from './loader';
+import SearchBar from './searchBar';
 
 const pageSize = 8;
 
@@ -17,6 +18,7 @@ const Users = () => {
    const [selectedProf, setSelectedProf] = useState();
    const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
    const [users, setUsers] = useState();
+   const [searchString, setSearchString] = useState('');
 
    useEffect(() => {
       api.users.fetchAll().then((data) => setUsers(data));
@@ -49,6 +51,10 @@ const Users = () => {
 
    const handleSort = (item) => {
       setSortBy(item);
+   };
+
+   const handleSearch = (string) => {
+      setSearchString(string);
    };
 
    if (users) {
@@ -95,6 +101,7 @@ const Users = () => {
             )}
             <div className="d-flex flex-column">
                <SearchStatus length={count} />
+               <SearchBar onSearch={handleSearch} value={searchString} />
                {count > 0 && (
                   <UsersTable
                      users={usersCrop}
