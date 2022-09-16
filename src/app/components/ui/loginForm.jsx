@@ -1,16 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '../common/form/textField';
 import validator from '../../utils/validator';
+import CheckBoxField from '../common/form/checkBoxField';
+
 const LoginForm = () => {
-   const [data, setData] = useState({ email: '', password: '' });
+   const [data, setData] = useState({ email: '', password: '', stayOn: false });
    const [errors, setErrors] = useState({});
 
-   const handleChange = ({ target }) => {
+   const handleChange = (target) => {
       setData((prevState) => ({
          ...prevState,
          [target.name]: target.value
       }));
    };
+
+   // const validateSchema = yup.object().shape({
+   //    password: yup
+   //       .string()
+   //       .required('Password is required')
+   //       .matches(/(?=.*[A-Z])/, 'Password must contain an uppercase letter')
+   //       .matches(/(?=.*[0-9])/, 'Password must contain a digit')
+   //       .matches(
+   //          /(?=.*[!@#$%^&*()])/,
+   //          'Password must contain a special symbol !@#$%^&*()'
+   //       )
+   //       .matches(/(?=.{8,})/, 'Password must contain at least 8 characters'),
+   //    email: yup
+   //       .string()
+   //       .required('Email is required')
+   //       .email('Email is not correct')
+   // });
 
    const validatorConfig = {
       email: {
@@ -36,6 +55,10 @@ const LoginForm = () => {
 
    const validate = () => {
       const errors = validator(data, validatorConfig);
+      // validateSchema
+      //    .validate(data)
+      //    .then(() => setErrors({}))
+      //    .catch((err) => setErrors({ [err.path]: err.message }));
 
       setErrors(errors);
       return Object.keys(errors).length === 0;
@@ -52,37 +75,37 @@ const LoginForm = () => {
       console.log(data);
    };
    return (
-      <div className="container mt-5">
-         <div className="row">
-            <div className="col-md-6 offset-md-3 shadow p-4">
-               <h3 className="mb-4">Login</h3>
-               <form onSubmit={handleSubmit}>
-                  <TextField
-                     label="Email"
-                     name="email"
-                     value={data.email}
-                     onChange={handleChange}
-                     error={errors.email}
-                  />
-                  <TextField
-                     label="Password"
-                     type="password"
-                     name="password"
-                     value={data.password}
-                     onChange={handleChange}
-                     error={errors.password}
-                  />
-                  <button
-                     type="submit"
-                     disabled={!isValid}
-                     className="btn btn-primary w-100 mx-auto"
-                  >
-                     Submit
-                  </button>
-               </form>
-            </div>
-         </div>
-      </div>
+      <form onSubmit={handleSubmit}>
+         <TextField
+            label="Email"
+            name="email"
+            value={data.email}
+            onChange={handleChange}
+            error={errors.email}
+         />
+         <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={data.password}
+            onChange={handleChange}
+            error={errors.password}
+         />
+         <CheckBoxField
+            value={data.stayOn}
+            onChange={handleChange}
+            name="stayOn"
+         >
+            <a>Stay on system</a>
+         </CheckBoxField>
+         <button
+            type="submit"
+            disabled={!isValid}
+            className="btn btn-primary w-100 mx-auto"
+         >
+            Submit
+         </button>
+      </form>
    );
 };
 
