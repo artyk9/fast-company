@@ -8,6 +8,7 @@ import SelectField from '../../common/form/selectField';
 import RadioField from '../../common/form/radioField';
 import MultiSelectField from '../../common/form/multiSelectField';
 import Loader from '../../common/loader';
+import BackHistoryButton from '../../common/backHistoryButton';
 
 const EditUserPage = ({ id }) => {
    const history = useHistory();
@@ -146,6 +147,7 @@ const EditUserPage = ({ id }) => {
 
    return !isLoading && Object.keys(professions).length > 0 ? (
       <div className="container mt-4">
+         <BackHistoryButton />
          <div className="row">
             <div className="col-md-6 offset-md-3 shadow p-4">
                <h3 className="mb-3">Редактируем данные пользователя</h3>

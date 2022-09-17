@@ -1,61 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import api from '../../../api';
-import Qualities from '../../ui/qualities';
-import Loader from '../../common/loader';
+import UserCard from '../../ui/userCard';
+import QualitiesCard from '../../ui/qualitiesCard';
+import MeetingsCard from '../../ui/meetingsCard';
+import Comments from '../../ui/comments';
 
-const UserPage = ({ id }) => {
-   const [user, setUser] = useState({});
-   const history = useHistory();
-
+const UserPage = ({ userId }) => {
+   const [user, setUser] = useState();
    useEffect(() => {
-      api.users.getById(id).then((data) => {
-         setUser(data);
-      });
+      api.users.getById(userId).then((data) => setUser(data));
    }, []);
 
-   const handleClick = () => {
-      history.push(`${history.location.pathname}/edit`);
-   };
-
-   if (!user || !Object.keys(user).length) return <Loader />;
-
-   return (
-      <>
-         <h2>Данные пользователя:</h2>
-         <table className="table table-striped d-inline-block">
-            <tbody>
-               <tr>
-                  <th scope="row">Имя</th>
-                  <td>{user.name}</td>
-               </tr>
-               <tr>
-                  <th scope="row">Профессия</th>
-                  <td>{user.profession.name}</td>
-               </tr>
-               <tr>
-                  <th scope="row">Качества</th>
-                  <td>
-                     <Qualities qualities={user.qualities} />
-                  </td>
-               </tr>
-               <tr>
-                  <th scope="row">Встретился, раз</th>
-                  <td>{user.completedMeetings}</td>
-               </tr>
-               <tr>
-                  <th scope="row">Оценка</th>
-                  <td>{user.rate}</td>
-               </tr>
-            </tbody>
-         </table>
-         <button onClick={handleClick}>Изменить</button>
-      </>
-   );
+   if (user) {
+      return (
+         <div className="container">
+            <div className="row gutters-sm">
+               <div className="col-md-4 mb-2">
+                  <UserCard user={user} />
+                  <QualitiesCard data={user.qualities} />
+                  <MeetingsCard value={user.completedMeetings} />
+               </div>
+               <div className="col-md-8">
+                  <Comments />
+               </div>
+            </div>
+         </div>
+      );
+   } else {
+      return <h1>Loading...</h1>;
+   }
 };
 UserPage.propTypes = {
-   id: PropTypes.string.isRequired
+   userId: PropTypes.string.isRequired
 };
 
 export default UserPage;
