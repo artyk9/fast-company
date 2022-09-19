@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 const MeetingsCard = ({ value }) => {
    return (
       <div className="card mb-3">
@@ -8,6 +7,7 @@ const MeetingsCard = ({ value }) => {
             <h5 className="card-title">
                <span>Completed meetings</span>
             </h5>
+
             <h1 className="display-1">{value}</h1>
          </div>
       </div>

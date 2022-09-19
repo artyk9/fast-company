@@ -11,12 +11,11 @@ const UserPage = ({ userId }) => {
    useEffect(() => {
       api.users.getById(userId).then((data) => setUser(data));
    }, []);
-
    if (user) {
       return (
          <div className="container">
             <div className="row gutters-sm">
-               <div className="col-md-4 mb-2">
+               <div className="col-md-4 mb-3">
                   <UserCard user={user} />
                   <QualitiesCard data={user.qualities} />
                   <MeetingsCard value={user.completedMeetings} />
@@ -28,9 +27,10 @@ const UserPage = ({ userId }) => {
          </div>
       );
    } else {
-      return <h1>Loading...</h1>;
+      return <h1>Loading</h1>;
    }
 };
+
 UserPage.propTypes = {
    userId: PropTypes.string.isRequired
 };

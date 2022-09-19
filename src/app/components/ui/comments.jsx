@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import api from '../../api';
 import { orderBy } from 'lodash';
-import AddCommentForm from '../common/comments/addCommentForm';
-import CommentsList from '../common/comments/commentsList';
+import React, { useEffect, useState } from 'react';
+import api from '../../api';
+import { useParams } from 'react-router-dom';
+import CommentsList, { AddCommentForm } from '../common/comments';
 
 const Comments = () => {
    const { userId } = useParams();
@@ -28,13 +27,13 @@ const Comments = () => {
       <>
          <div className="card mb-2">
             {' '}
-            <div className="card-body">
+            <div className="card-body ">
                <AddCommentForm onSubmit={handleSubmit} />
             </div>
          </div>
          {sortedComments.length > 0 && (
             <div className="card mb-3">
-               <div className="card-body">
+               <div className="card-body ">
                   <h2>Comments</h2>
                   <hr />
                   <CommentsList
@@ -47,4 +46,5 @@ const Comments = () => {
       </>
    );
 };
+
 export default Comments;

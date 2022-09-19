@@ -7,82 +7,78 @@ import GroupList from '../../common/groupList';
 import SearchStatus from '../../ui/searchStatus';
 import UsersTable from '../../ui/usersTable';
 import _ from 'lodash';
-import Loader from '../../common/loader';
-import SearchBar from '../../searchBar';
-
-const pageSize = 8;
 
 const UsersListPage = () => {
    const [currentPage, setCurrentPage] = useState(1);
-   const [professions, setProfessions] = useState();
+   const [professions, setProfession] = useState();
+   const [searchQuery, setSearchQuery] = useState('');
    const [selectedProf, setSelectedProf] = useState();
    const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
-   const [users, setUsers] = useState();
-   const [searchString, setSearchString] = useState('');
-   console.log(searchString);
+   const pageSize = 8;
 
+   const [users, setUsers] = useState();
    useEffect(() => {
       api.users.fetchAll().then((data) => setUsers(data));
-      api.professions.fetchAll().then((data) => setProfessions(data));
    }, []);
-
    const handleDelete = (userId) => {
       setUsers(users.filter((user) => user._id !== userId));
    };
-
-   const handleToggleBookmark = (userId) => {
-      const newUsersState = users.map((user) => {
-         if (user._id === userId) user.bookmark = !user.bookmark;
+   const handleToggleBookMark = (id) => {
+      const newArray = users.map((user) => {
+         if (user._id === id) {
+            return { ...user, bookmark: !user.bookmark };
+         }
          return user;
       });
-      setUsers(newUsersState);
+      setUsers(newArray);
    };
 
    useEffect(() => {
+      api.professions.fetchAll().then((data) => setProfession(data));
+   }, []);
+
+   useEffect(() => {
       setCurrentPage(1);
-   }, [selectedProf]);
+   }, [selectedProf, searchQuery]);
 
    const handleProfessionSelect = (item) => {
-      setSearchString('');
+      if (searchQuery !== '') setSearchQuery('');
       setSelectedProf(item);
+   };
+   const handleSearchQuery = ({ target }) => {
+      setSelectedProf(undefined);
+      setSearchQuery(target.value);
    };
 
    const handlePageChange = (pageIndex) => {
       setCurrentPage(pageIndex);
    };
-
    const handleSort = (item) => {
       setSortBy(item);
    };
 
-   const handleSearch = ({ target }) => {
-      setSelectedProf(undefined);
-      setSearchString(target.value);
-   };
-
    if (users) {
-      const filteredUser = searchString
-         ? users.filter((user) =>
-              user.name.toLowerCase().includes(searchString.toLowerCase())
+      const filteredUsers = searchQuery
+         ? users.filter(
+              (user) =>
+                 user.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !==
+                 -1
            )
          : selectedProf
-         ? users.filter((user) => {
-              return (
+         ? users.filter(
+              (user) =>
                  JSON.stringify(user.profession) ===
                  JSON.stringify(selectedProf)
-              );
-           })
+           )
          : users;
 
-      const count = filteredUser.length;
-
-      const setPage = Math.ceil(count / pageSize);
-      if (currentPage > setPage) {
-         setCurrentPage(setPage);
-      }
-      const sortedUsers = _.orderBy(filteredUser, sortBy.path, sortBy.order);
+      const count = filteredUsers.length;
+      const sortedUsers = _.orderBy(
+         filteredUsers,
+         [sortBy.path],
+         [sortBy.order]
+      );
       const usersCrop = paginate(sortedUsers, currentPage, pageSize);
-
       const clearFilter = () => {
          setSelectedProf();
       };
@@ -95,27 +91,32 @@ const UsersListPage = () => {
                      selectedItem={selectedProf}
                      items={professions}
                      onItemSelect={handleProfessionSelect}
-                     valueProperty={'_id'}
-                     contentPropety="name"
                   />
                   <button
                      className="btn btn-secondary mt-2"
                      onClick={clearFilter}
                   >
+                     {' '}
                      Очистить
                   </button>
                </div>
             )}
             <div className="d-flex flex-column">
                <SearchStatus length={count} />
-               <SearchBar onSearch={handleSearch} value={searchString} />
+               <input
+                  type="text"
+                  name="searchQuery"
+                  placeholder="Search..."
+                  onChange={handleSearchQuery}
+                  value={searchQuery}
+               />
                {count > 0 && (
                   <UsersTable
                      users={usersCrop}
                      onSort={handleSort}
                      selectedSort={sortBy}
                      onDelete={handleDelete}
-                     onToggleBookmark={handleToggleBookmark}
+                     onToggleBookMark={handleToggleBookMark}
                   />
                )}
                <div className="d-flex justify-content-center">
@@ -130,7 +131,7 @@ const UsersListPage = () => {
          </div>
       );
    }
-   return <Loader />;
+   return 'loading...';
 };
 UsersListPage.propTypes = {
    users: PropTypes.array

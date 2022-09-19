@@ -11,4 +11,5 @@ CommentsList.propTypes = {
    comment: PropTypes.array,
    onRemove: PropTypes.func
 };
+
 export default CommentsList;

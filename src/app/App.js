@@ -5,18 +5,18 @@ import Main from './components/layout/main';
 import Login from './components/layout/login';
 import Users from './components/layout/users';
 
-const App = () => {
+function App() {
    return (
-      <div className="p-2">
+      <div>
          <NavBar />
          <Switch>
-            <Route path="/login/:type?" component={Login} />
             <Route path="/users/:userId?/:edit?" component={Users} />
-            <Route exact path="/" component={Main} />
+            <Route path="/login/:type?" component={Login} />
+            <Route path="/" exact component={Main} />
             <Redirect to="/" />
          </Switch>
       </div>
    );
-};
+}
 
 export default App;
