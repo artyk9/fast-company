@@ -5,7 +5,7 @@ import SelectField from '../../common/form/selectField';
 import RadioField from '../../common/form/radioField';
 import MultiSelectField from '../../common/form/multiSelectField';
 import BackHistoryButton from '../../common/backButton';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
    getQualities,
    getQualitiesLoadingStatus
@@ -19,9 +19,8 @@ import { getCurrentUserData, updateUser } from '../../../store/users';
 const EditUserPage = () => {
    const [isLoading, setIsLoading] = useState(true);
    const [data, setData] = useState();
-   const dispatch = useDispatch();
-
    const currentUser = useSelector(getCurrentUserData());
+   const dispatch = useDispatch();
    const qualities = useSelector(getQualities());
    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
    const qualitiesList = qualities.map((q) => ({

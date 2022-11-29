@@ -19,7 +19,9 @@ export function displayDate(data) {
          return `${date.getHours()}:${date.getMinutes()}`;
       }
 
-      return date.toLocaleString('default', { month: 'long', day: 'numeric' });
+      return `${date.getDate()} ${date.toLocaleString('default', {
+         month: 'long'
+      })}`;
    }
    return (
       date.getFullYear() + '.' + (date.getMonth() + 1) + '_' + date.getDate()

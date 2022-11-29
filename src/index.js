@@ -9,14 +9,14 @@ import { Provider } from 'react-redux';
 import history from './app/utils/history';
 
 const store = createStore();
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-ReactDOM.render(
-   <React.StrictMode>
-      <Provider store={store}>
-         <Router history={history}>
+root.render(
+   <Provider store={store}>
+      <Router history={history}>
+         <React.StrictMode>
             <App />
-         </Router>
-      </Provider>
-   </React.StrictMode>,
-   document.getElementById('root')
+         </React.StrictMode>
+      </Router>
+   </Provider>
 );
