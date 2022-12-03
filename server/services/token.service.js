@@ -3,14 +3,15 @@ const config = require('config')
 const Token = require('../models/Token')
 
 class TokenService {
+  // return: accessToken, refreshToken, expiresIn
   generate(payload) {
-    const accesToken = jwt.sign(payload, config.get('accessSecret'), {
-      expiresIn: '1h',
+    const accessToken = jwt.sign(payload, config.get('accessSecret'), {
+      expiresIn: '1h'
     })
     const refreshToken = jwt.sign(payload, config.get('refreshSecret'))
-
-    return { accesToken, refreshToken, expiresIn: 3600 }
+    return {accessToken, refreshToken, expiresIn: 3600}
   }
+
   async save(user, refreshToken) {
     const data = await Token.findOne({ user })
     if (data) {
@@ -21,17 +22,27 @@ class TokenService {
     const token = await Token.create({ user, refreshToken })
     return token
   }
+
   validateRefresh(refreshToken) {
     try {
-      return jwt.verify(refreshToken, config.get('refreshSecret'))
-    } catch (error) {
+       return jwt.verify(refreshToken, config.get('refreshSecret'))
+    } catch (e) {
       return null
     }
   }
+
+  validateAccess(accessToken) {
+    try {
+      return jwt.verify(accessToken, config.get('accessSecret'))
+    } catch (e) {
+      return null
+    }
+  }
+
   async findToken(refreshToken) {
     try {
       return await Token.findOne({ refreshToken })
-    } catch (error) {
+    } catch (e) {
       return null
     }
   }

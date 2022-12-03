@@ -4,11 +4,11 @@ const router = express.Router({ mergeParams: true })
 
 router.get('/', async (req, res) => {
   try {
-    const qualities = await Quality.find()
-    res.status(200).send(qualities)
-  } catch (error) {
+    const list = await Quality.find()
+    res.status(200).send(list)
+  } catch (e) {
     res.status(500).json({
-      message: 'На сервер произошла ошибка. Попробуйте позже ',
+      message: 'На сервере произошла ошибка. Попробуйте позже'
     })
   }
 })

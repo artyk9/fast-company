@@ -13,5 +13,5 @@ function generateUserData() {
 }
 
 module.exports = {
-  generateUserData,
+  generateUserData
 }
